@@ -1,3 +1,5 @@
+## Predictivo de Precios Inmobiliarios
+
 Este proyecto aplica técnicas de aprendizaje automático para predecir el precio de propiedades inmobiliarias. Se utilizan regresión lineal y HuberRegressor, junto con selección de variables y tratamiento de valores atípicos.
 
 ---

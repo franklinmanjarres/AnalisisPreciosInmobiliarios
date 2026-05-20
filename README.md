@@ -1,5 +1,3 @@
-# Análisis Predictivo de Precios Inmobiliarios
-
 ##  Análisis Predictivo de Precios Inmobiliarios
 
 <p align="center">

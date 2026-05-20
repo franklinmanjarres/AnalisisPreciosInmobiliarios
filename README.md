@@ -1,5 +1,14 @@
 # Análisis Predictivo de Precios Inmobiliarios
 
+##  Análisis Predictivo de Precios Inmobiliarios
+
+<p align="center">
+  <img src="precios_inmobiliarios_animado.gif" width="700" alt="Predicción de precios inmobiliarios"/>
+</p>
+
+**Modelo ganador:** HuberRegressor · MAE: 169,465 · Mejora: 7.3% vs Regresión Lineal
+
+
 ##  Descripción
 Proyecto de Machine Learning para predecir precios de propiedades 
 inmobiliarias. Se compararon modelos de regresión y se seleccionaron 

@@ -1,6 +1,6 @@
 # Análisis Predictivo de Precios Inmobiliarios
 
-![Banner](https://github.com/franklinmanjarres/AnalisisPreciosInmobiliarios/blob/main/assets/destacado_linkedin_inmobiliario.png)
+![Banner](https://github.com/franklinmanjarres/AnalisisPreciosInmobiliarios/blob/main/assets/banner_inmobiliario_v3%20(1).png)
 
 > Modelo robusto que predice el precio de propiedades resistiendo el efecto de precios extremos — sin sacrificar interpretabilidad.
 

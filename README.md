@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="precios_inmobiliarios_animado.gif" width="700" alt="Predicción de precios inmobiliarios"/>
-</p>
-
 # Análisis Predictivo de Precios Inmobiliarios
 
 ![Banner](assets/banner_inmobiliario.png)

@@ -182,4 +182,3 @@ Probar modelos no lineales como Random Forest o XGBoost, aplicar optimización d
 ## Autor
 
 Proyecto desarrollado como parte de un curso de **Machine Learning & AI**.
-Si tienes preguntas o sugerencias, puedes abrir un *issue* en este repositorio.

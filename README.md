@@ -2,16 +2,16 @@
 
 ![portada](assets/portada_linkedin_inmobiliario_v2.png)
 
-> Modelo robusto que predice el precio de propiedades resistiendo el efecto de precios extremos — sin sacrificar interpretabilidad.
+> Implementación de modelos de regresión robusta para predicción de precios inmobiliarios, diseñada para mitigar el impacto de valores atípicos (outliers) sin perder interpretabilidad.
 
 ---
 
 ## Resultado
 
-| Modelo | MAE | Diferencia |
+| Modelo | MAE | Mejora |
 |---|---|---|
-| Regresión Lineal (baseline) | 182,847 | — |
-| **HuberRegressor** | **169,465** | **-7.3% de error** |
+| Regresión Lineal | 182,847 | — |
+| HuberRegressor | 169,465 | 7.3% menor error |
 
 El HuberRegressor superó a la regresión lineal clásica reduciendo el error promedio de predicción en un 7.3%.
 
@@ -57,7 +57,7 @@ pip install scikit-learn pandas numpy matplotlib seaborn scipy
 
 ## 1. Identificación del Problema
 
-### ¿Qué problema existe?
+### ## Objetivo del Proyecto
 
 Comprar o vender una propiedad sin información precisa sobre su valor real es un problema costoso. Para un comprador, significa pagar de más. Para una inmobiliaria, significa perder dinero o clientes. Para un banco que otorga hipotecas, significa asumir riesgos mal calculados.
 
@@ -65,13 +65,13 @@ La pregunta que resuelve este proyecto es directa:
 
 **¿Podemos predecir el precio de una propiedad a partir de sus características físicas y de ubicación?**
 
-### ¿Por qué es difícil?
+### Desafíos Técnicos
 
 Los precios inmobiliarios no se distribuyen de forma uniforme. Existen propiedades con precios extremadamente altos que distorsionan los modelos tradicionales — un penthouse de lujo en el mismo dataset que un apartamento estudio puede arruinar las predicciones si no se maneja correctamente.
 
 Este fenómeno se llama **valores atípicos (outliers)** y es el principal reto técnico del proyecto.
 
-### ¿Qué propone este proyecto?
+### Solución Propuesta
 
 Evaluar y comparar dos modelos de regresión:
 
@@ -102,7 +102,7 @@ Evaluar y comparar dos modelos de regresión:
 | `has_air_conditioning` | Booleana | Si tiene aire acondicionado |
 | `price` | Numérica | Precio de la propiedad (variable a predecir) |
 
-### ¿Cómo se preparan los datos?
+### Preprocesamiento de Datos
 
 **1. Eliminación de columnas con muchos valores faltantes**
 Columnas como `exposition` (75% nulos) o `energy_performance_category` (49% nulos) se eliminan porque no aportan información confiable.
@@ -113,9 +113,9 @@ La variable `property_type` tiene miles de categorías. Se conservan solo las qu
 > **¿Qué es cardinalidad?** La cantidad de valores únicos que tiene una variable. Alta cardinalidad significa demasiadas categorías distintas, lo cual dificulta el aprendizaje del modelo.
 
 **3. Codificación One-Hot**
-La variable categórica `property_type` se convierte en columnas numéricas para que el modelo pueda procesarla.
+Las variables categóricas fueron transformadas mediante One-Hot Encoding.
 
-> **¿Qué es One-Hot Encoding?** Transformar una variable de texto en columnas de ceros y unos. Ejemplo: "apartamento" → columna `es_apartamento = 1`, `es_casa = 0`.
+> Se aplicó reducción de cardinalidad mediante regla de Pareto (99%) para disminuir sparsity y mejorar estabilidad del modelo.
 
 **4. Estandarización**
 Todas las variables numéricas se transforman para tener media 0 y desviación estándar 1, evitando que variables con valores grandes dominen el modelo.
@@ -144,7 +144,7 @@ Todas las variables numéricas se transforman para tener media 0 y desviación e
 9. Análisis de coeficientes — variables más influyentes
 ```
 
-### ¿Cómo se mide el resultado?
+### Métrica de Evaluación
 
 Se usa el **MAE (Mean Absolute Error)**: el promedio de cuánto se equivoca el modelo al predecir el precio.
 
@@ -157,25 +157,38 @@ $$\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} \left| y_i - \hat{y}_i \right|$$
 
 ## 3. Conclusiones Finales
 
-### ¿Qué modelo ganó y por qué?
-
+### Comparación de Modelos
 El **HuberRegressor redujo el error en un 7.3%** respecto a la regresión lineal, sin sacrificar interpretabilidad. Es más adecuado cuando los datos tienen precios extremos — como ocurre siempre en el mercado inmobiliario real.
 
-### ¿Qué variables más influyen en el precio?
+### Variables Más Influyentes
 
 - Las variables de **ubicación geográfica** tienen alta influencia
 - El tipo de propiedad `viager` tiene el coeficiente más negativo — reduce significativamente el precio predicho
 - Garaje, balcón y aire acondicionado tienen influencia positiva
 
-### ¿Qué limitaciones tiene?
+### Limitaciones del Modelo
 
 - El modelo no captura relaciones no lineales entre variables y precio
 - El umbral de Huber fue fijado manualmente; optimización de hiperparámetros podría mejorar resultados
 - Variables con alta nulidad debieron descartarse, reduciendo información disponible
 
-### ¿Qué sigue?
+### Trabajo Futuro
 
 Probar modelos no lineales como Random Forest o XGBoost, aplicar optimización de hiperparámetros y enriquecer el dataset con variables de contexto como cercanía a servicios.
+
+
+## Habilidades Demostradas
+
+- Modelado estadístico
+- Regresión robusta
+- Machine Learning supervisado
+- Feature Engineering
+- Tratamiento de outliers
+- Preprocesamiento de datos
+- Estandarización y codificación
+- Evaluación de modelos
+- Interpretabilidad de modelos
+- Python / Scikit-learn
 
 ---
 

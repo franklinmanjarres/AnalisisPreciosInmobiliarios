@@ -34,19 +34,6 @@ El HuberRegressor superó a la regresión lineal clásica reduciendo el error pr
 
 ---
 
-## Cómo Ejecutar
-
-1. Abre el notebook en Google Colab o Jupyter
-2. Carga los archivos `X.csv` y `y.csv` en tu Google Drive
-3. Actualiza la ruta en las celdas de carga
-4. Ejecuta todas las celdas en orden
-
-```bash
-pip install scikit-learn pandas numpy matplotlib seaborn scipy
-```
-
----
-
 ## Tabla de Contenidos
 
 - [1. Identificación del Problema](#1-identificación-del-problema)

@@ -57,7 +57,7 @@ pip install scikit-learn pandas numpy matplotlib seaborn scipy
 
 ## 1. Identificación del Problema
 
-### ## Objetivo del Proyecto
+###  Objetivo del Proyecto
 
 Comprar o vender una propiedad sin información precisa sobre su valor real es un problema costoso. Para un comprador, significa pagar de más. Para una inmobiliaria, significa perder dinero o clientes. Para un banco que otorga hipotecas, significa asumir riesgos mal calculados.
 

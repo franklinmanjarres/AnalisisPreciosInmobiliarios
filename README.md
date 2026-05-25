@@ -1,6 +1,6 @@
 # Análisis Predictivo de Precios Inmobiliarios
 
-![portada](assets/portada_linkedin_inmobiliario_v4.png)
+![portada]assets/Portada_inmobiliario.png()
 
 > Implementación de modelos de regresión robusta para predicción de precios inmobiliarios, diseñada para mitigar el impacto de valores atípicos (outliers) sin perder interpretabilidad.
 

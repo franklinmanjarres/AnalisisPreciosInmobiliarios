@@ -84,7 +84,7 @@ Evaluar y comparar dos modelos de regresión:
 
 ## 2. Los Datos — Cómo se utilizan para resolver el problema
 
-### ¿Qué datos se usan?
+### Descripción del Dataset
 
 | Archivo | Contenido |
 |---|---|
@@ -150,9 +150,8 @@ Se usa el **MAE (Mean Absolute Error)**: el promedio de cuánto se equivoca el m
 
 $$\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} \left| y_i - \hat{y}_i \right|$$
 
-- Cuanto más bajo el MAE, mejor predice el modelo
-- MAE = 169,465 → el modelo se equivoca en promedio en ese valor al predecir el precio
-
+- Cuanto menor es el MAE, mayor es la precisión del modelo
+- El modelo presenta un error absoluto promedio de 169,465 en la predicción del precio de las propiedades
 ---
 
 ## 3. Conclusiones Finales

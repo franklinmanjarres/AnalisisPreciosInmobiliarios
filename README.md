@@ -19,8 +19,6 @@ El HuberRegressor superó a la regresión lineal clásica reduciendo el error pr
 
 ## Tecnologías
 
-Python · Scikit-learn · Pandas · NumPy · Matplotlib · SciPy
-
 | Herramienta | Uso |
 |---|---|
 | Python 3.x | Lenguaje principal |

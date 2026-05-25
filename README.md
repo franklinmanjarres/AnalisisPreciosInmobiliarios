@@ -110,8 +110,6 @@ Columnas como `exposition` (75% nulos) o `energy_performance_category` (49% nulo
 **2. Reducción de cardinalidad con regla de Pareto (99%)**
 La variable `property_type` tiene miles de categorías. Se conservan solo las que representan el 99% de los datos.
 
-> **¿Qué es cardinalidad?** La cantidad de valores únicos que tiene una variable. Alta cardinalidad significa demasiadas categorías distintas, lo cual dificulta el aprendizaje del modelo.
-
 **3. Codificación One-Hot**
 Las variables categóricas fueron transformadas mediante One-Hot Encoding.
 

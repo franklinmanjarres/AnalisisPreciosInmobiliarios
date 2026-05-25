@@ -19,10 +19,7 @@ El HuberRegressor superó a la regresión lineal clásica reduciendo el error pr
 
 ## Tecnologías
 
-![Python](https://img.shields.io/badge/Python-3.x-3776AB?style=flat&logo=python&logoColor=white)
-![Scikit-learn](https://img.shields.io/badge/Scikit--learn-ML-F7931E?style=flat&logo=scikit-learn&logoColor=white)
-![Pandas](https://img.shields.io/badge/Pandas-Data-150458?style=flat&logo=pandas&logoColor=white)
-![Status](https://img.shields.io/badge/Estado-Completado-22c55e?style=flat)
+Python · Scikit-learn · Pandas · NumPy · Matplotlib · SciPy
 
 | Herramienta | Uso |
 |---|---|

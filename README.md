@@ -96,9 +96,3 @@ manjarresfranklin587@gmail.com
 LinkedIn: https://www.linkedin.com/in/franklinmanjarres/
 
 Proyecto desarrollado con enfoque comercial en soluciones de ML para PropTech.
-
----
-
-## Licencia
-
-Este proyecto está bajo la licencia MIT.

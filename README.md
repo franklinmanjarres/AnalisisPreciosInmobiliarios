@@ -1,179 +1,96 @@
-# Análisis Predictivo de Precios Inmobiliarios
+# Modelado de Regresión Robusta y Machine Learning para la Predicción de Precios Inmobiliarios (PropTech)
 
 ![portada](assets/Portada_inmobiliario.png)
 
-> Implementación de modelos de regresión robusta para predicción de precios inmobiliarios, diseñada para mitigar el impacto de valores atípicos (outliers) sin perder interpretabilidad.
+> Implementación de un pipeline de punta a punta (end-to-end) en Python para optimizar la tasación automatizada de activos residenciales, mitigando el impacto de valores atípicos mediante algoritmos de regresión robusta sin perder la interpretabilidad comercial de las variables.
 
 ---
 
-## Resultado
+## 1. Resumen Ejecutivo (Executive Summary)
 
-| Modelo | MAE | Mejora |
+* **Impacto Cuantificado ("Wow" Result):** La implementación del modelo robusto `HuberRegressor` superó la regresión lineal tradicional, logrando una **reducción del 7.3% en el error de predicción**, disminuyendo el Error Absoluto Medio (MAE) de 182,847 USD a **169,465 USD**.
+* **El Problema:** El mercado inmobiliario real presenta una alta volatilidad y precios extremos (penthouses y mansiones) que actúan como valores atípicos (*outliers*), distorsionando por completo los modelos estadísticos clásicos y provocando valoraciones erróneas.
+* **La Solución:** Se construyó un pipeline de Machine Learning automatizado que ejecuta limpieza de datos masivos, ingeniería de variables basada en la regla de Pareto (99%) y estandarización para entrenar un modelo robusto que penaliza las desviaciones extremas.
+* **Próximos Pasos:** Desarrollar modelos no lineales basados en árboles (*Tree-based models*) y enriquecer el dataset con variables de contexto urbano para cerrar aún más la brecha del error.
+
+---
+
+## 2. Definición del Problema de Negocio (Business Problem)
+
+En el sector inmobiliario y de tecnología de la propiedad (*PropTech*), estimar incorrectamente el valor de un inmueble conlleva pérdidas financieras críticas para los tres actores principales del ecosistema:
+1. **Agencias e Inmobiliarias:** Un precio inflado estanca el activo en el mercado y destruye la confianza del cliente; un precio rezagado significa regalar el margen de ganancia neta.
+2. **Compradores e Inversores:** Se enfrentan a la asimetría de información, asumiendo el riesgo de pagar un sobreprecio injustificado que compromete su retorno de inversión.
+3. **Entidades Financieras (Bancos):** Necesitan calcular con total precisión el valor de las garantías que respaldan los créditos hipotecarios para mitigar el riesgo de impago.
+
+Este proyecto resuelve de forma directa la pregunta comercial central: **¿Podemos predecir el valor real de mercado de una propiedad a partir exclusivamente de sus dimensiones físicas y su ubicación geográfica?** Al abordar este problema, demostramos que no solo analizamos código, sino que protegemos el capital de la organización mediante decisiones respaldadas por datos.
+
+---
+
+## 3. Metodología End-to-End y Habilidades Técnicas (Methodology & Skills)
+
+Para garantizar que el modelo sea escalable y libre de sobreajuste (*overfitting*), los datos (37,368 registros) se procesaron secuencialmente mediante un flujo de producción estricto:
+
+1. **Limpieza Avanzada y Gestión de Nulidad:** Diagnóstico automatizado de la calidad de la información. Se descartaron columnas con ruido estructural o vacíos de información masivos que habrían sesgado el aprendizaje: `exposition` (75.66% nulos), `floor` (74% nulos), `land_size` (58% nulos), `ghg_category` (50% nulos) y variables de eficiencia energética (48.97% nulos).
+2. **Ingeniería de Variables (Feature Engineering):**
+   * *Filtro de Pareto al 99%:* La variable categórica `property_type` presentaba miles de variantes de baja frecuencia (alta cardinalidad). Se aplicó una regla de Pareto para conservar únicamente las categorías que acumulan el 99% de los datos, reduciendo drásticamente la dispersión (*sparsity*).
+   * *Codificación One-Hot Encoding:* Transformación de variables cualitativas remanentes a columnas binarias mediante `pd.get_dummies()`.
+   * *Estandarización Estadística:* Uso de `StandardScaler` en variables numéricas para escalar sus valores a media 0 y desviación estándar 1, asegurando estabilidad numérica en los algoritmos lineales.
+3. **Validación Cruzada:** División estricta del dataset en conjuntos de entrenamiento (75%) y prueba (25%).
+4. **Modelado Comparativo:** Evaluación paralela de un modelo clásico (`LinearRegression`) frente a uno robusto (`HuberRegressor`), utilizando funciones de Scipy para analizar asimetrías y curtosis estadísticas en los residuos de los precios.
+
+**Habilidades Clave Demostradas:** Machine Learning Supervisado, Regresión Robusta, Tratamiento de Outliers, Feature Engineering, Estandarización de Variables, Validación Cruzada y Evaluación de Métricas de Error.
+
+---
+
+## 4. Resultados y Métricas de Evaluación (Results)
+
+La métrica principal seleccionada para medir el rendimiento fue el **Error Absoluto Medio (MAE)**. Se prefirió sobre otras métricas debido a que expresa el error promedio directamente en unidades monetarias (USD), permitiendo una traducción directa del desempeño matemático al lenguaje del negocio.
+
+| Modelo Evaluado | MAE (Error Promedio) | Comportamiento frente a Outliers |
 |---|---|---|
-| Regresión Lineal | 182,847 | — |
-| HuberRegressor | 169,465 | 7.3% menor error |
-
-El HuberRegressor superó a la regresión lineal clásica reduciendo el error promedio de predicción en un 7.3%.
+| Regresión Lineal Clásica | 182,847 USD | Vulnerable; las propiedades de lujo arrastran la línea de tendencia distorsionando la predicción común. |
+| **HuberRegressor (Elegido)** | **169,465 USD** | **Robusto; ignora el peso desproporcionado de los valores extremos, reduciendo el error un 7.3%**. |
 
 ---
 
-## Tecnologías
+## 5. Análisis de Coeficientes y Recomendaciones Estratégicas (Business Recommendations)
 
-| Herramienta | Uso |
-|---|---|
-| Python 3.x | Lenguaje principal |
-| Scikit-learn | Modelos, preprocesamiento y métricas |
-| Pandas / NumPy | Manipulación de datos |
-| Matplotlib / Seaborn | Visualización |
-| SciPy | Análisis estadístico |
+Más allá de las métricas, los coeficientes del modelo `HuberRegressor` actúan como un motor de insights comerciales para la toma de decisiones de inversión o desarrollo inmobiliario:
 
----
-
-## Tabla de Contenidos
-
-- [1. Identificación del Problema](#1-identificación-del-problema)
-- [2. Los Datos — Cómo se utilizan para resolver el problema](#2-los-datos--cómo-se-utilizan-para-resolver-el-problema)
-- [3. Conclusiones Finales](#3-conclusiones-finales)
+* **El Factor del Tipo de Propiedad:**
+  * El coeficiente de `property_type_maison` es de **-27,264 USD**. Esto indica que, manteniendo constantes el resto de las variables (ubicación y tamaño), las casas valen en promedio 27k USD menos que la categoría base de apartamentos (`appartement`). 
+  * *Recomendación de Negocio:* Las estrategias de adquisición de la compañía deben priorizar la compra y remodelación de apartamentos en zonas urbanas, dado que el mercado castiga el formato de casa tradicional frente al apartamento vertical en este dataset. Categorías especiales como `viager` (-10,671 USD) requieren un descuento preestablecido en los algoritmos de compra debido a sus restricciones legales intrínsecas.
+* **El Impacto Contra-intuitivo de los Garajes (`nb_boxes`):**
+  * Cada plaza de garaje cerrada adicional **reduce el precio predicho en -2,052 USD**. 
+  * *Insight de Negocio:* Esto sugiere que en los centros urbanos densos, el costo de mantenimiento asociado a los espacios de estacionamiento cerrados no es valorado por el comprador, o bien estas plazas están correlacionadas con ubicaciones rurales con menor plusvalía.
+  * *Recomendación de Negocio:* Detener la sobreevaluación o construcción masiva de garajes adicionales si el objetivo del proyecto es maximizar el valor de reventa inmediato.
+* **Atributos que Elevan la Plusvalía:**
+  * El incremento en el número de habitaciones (`nb_rooms`) junto con comodidades específicas como terrazas, balcones y aire acondicionado arrojaron pesos positivos determinantes en la ecuación.
+  * *Recomendación de Negocio:* Dirigir los presupuestos de remodelación física (*flipping*) exclusivamente a la apertura de espacios exteriores (balcón/terraza) y a la instalación de aire acondicionado, garantizando el mayor retorno de inversión (ROI) directo sobre el valor final de venta.
 
 ---
 
-## 1. Identificación del Problema
+## 6. Limitaciones del Proyecto y Próximos Pasos (Limitations & Next Steps)
 
-###  Objetivo del Proyecto
+Para mantener un enfoque de mejora continua y transparencia en la ingeniería de datos, se han mapeado las limitaciones actuales y las oportunidades de expansión a largo plazo:
 
-Comprar o vender una propiedad sin información precisa sobre su valor real es un problema costoso. Para un comprador, significa pagar de más. Para una inmobiliaria, significa perder dinero o clientes. Para un banco que otorga hipotecas, significa asumir riesgos mal calculados.
-
-La pregunta que resuelve este proyecto es directa:
-
-**¿Podemos predecir el precio de una propiedad a partir de sus características físicas y de ubicación?**
-
-### Desafíos Técnicos
-
-Los precios inmobiliarios no se distribuyen de forma uniforme. Existen propiedades con precios extremadamente altos que distorsionan los modelos tradicionales — un penthouse de lujo en el mismo dataset que un apartamento estudio puede arruinar las predicciones si no se maneja correctamente.
-
-Este fenómeno se llama **valores atípicos (outliers)** y es el principal reto técnico del proyecto.
-
-### Solución Propuesta
-
-Evaluar y comparar dos modelos de regresión:
-
-- **Regresión Lineal** — modelo clásico, sensible a los outliers
-- **HuberRegressor** — modelo robusto, diseñado para resistir el efecto de precios extremos
-
-> **Ejemplo concreto:** Imagina 100 apartamentos y 2 mansiones de lujo en el mismo dataset. Un modelo común intenta ajustarse a todos incluyendo las mansiones, y falla en los apartamentos normales. El HuberRegressor le da menos peso a esas mansiones y predice mejor el resto.
+* **Limitaciones Detectadas:** Al ser un enfoque basado en coeficientes lineales, el modelo asume relaciones directas y uniformes, perdiendo de vista posibles interacciones complejas no lineales entre el tamaño de la propiedad y ciertas ubicaciones exclusivas. Adicionalmente, el umbral de Huber se configuró manualmente y la alta nulidad de variables críticas como la categoría de rendimiento energético redujo el volumen de datos útiles para el análisis.
+* **Trabajo Futuro (Cherry on Top):**
+  1. *Modelado No Lineal:* Implementar y comparar algoritmos basados en ensambles de árboles de decisión como `RandomForestRegressor` y `XGBoost` para capturar interacciones complejas de variables.
+  2. *Optimización de Hiperparámetros:* Ejecutar búsquedas sistemáticas (`GridSearchCV` / `RandomizedSearchCV`) para sintonizar científicamente el parámetro épsilon del regresor robusto.
+  3. *Enriquecimiento de Datos Geográficos:* Integrar APIs de geolocalización externa para calcular distancias a puntos de interés (estaciones de transporte, escuelas de alto nivel, hospitales y centros comerciales), variables determinantes en el valor real del suelo.
 
 ---
 
-## 2. Los Datos — Cómo se utilizan para resolver el problema
+### Tecnologías Utilizadas
+* Python 3.x, Scikit-learn, Pandas, NumPy, Matplotlib, Seaborn, SciPy.
 
-### Descripción del Dataset
+### Autor
+* **Franklin Manjarres**
+* ✉️ [manjarresfranklin587@gmail.com](mailto:manjarresfranklin587@gmail.com)
+* 💼 [LinkedIn](https://www.linkedin.com/in/franklinmanjarres/)
 
-| Archivo | Contenido |
-|---|---|
-| `X.csv` | Variables independientes — características de cada propiedad |
-| `y.csv` | Variable objetivo — precio de cada propiedad |
-
-### Variables principales
-
-| Variable | Tipo | Descripción |
-|---|---|---|
-| `property_type` | Categórica | Tipo de propiedad (apartamento, casa, etc.) |
-| `approximate_latitude / longitude` | Numérica | Ubicación geográfica |
-| `has_a_garage` | Booleana | Si tiene garaje |
-| `has_a_balcony` | Booleana | Si tiene balcón |
-| `has_air_conditioning` | Booleana | Si tiene aire acondicionado |
-| `price` | Numérica | Precio de la propiedad (variable a predecir) |
-
-### Preprocesamiento de Datos
-
-**1. Eliminación de columnas con muchos valores faltantes**
-Columnas como `exposition` (75% nulos) o `energy_performance_category` (49% nulos) se eliminan porque no aportan información confiable.
-
-**2. Reducción de cardinalidad con regla de Pareto (99%)**
-La variable `property_type` tiene miles de categorías. Se conservan solo las que representan el 99% de los datos.
-
-**3. Codificación One-Hot**
-Las variables categóricas fueron transformadas mediante One-Hot Encoding.
-
-> Se aplicó reducción de cardinalidad mediante regla de Pareto (99%) para disminuir sparsity y mejorar estabilidad del modelo.
-
-**4. Estandarización**
-Todas las variables numéricas se transforman para tener media 0 y desviación estándar 1, evitando que variables con valores grandes dominen el modelo.
-
-### Flujo del proyecto (pipeline)
-
-> **Pipeline** es la secuencia ordenada de pasos que siguen los datos desde que entran hasta que se obtiene el resultado final. Como una línea de producción: cada etapa transforma los datos y los pasa a la siguiente.
-
-```
-1. Carga de datos (X.csv + y.csv)
-        ↓
-2. Limpieza — eliminación de columnas con alta nulidad
-        ↓
-3. Reducción de cardinalidad (Pareto 99%)
-        ↓
-4. One-Hot Encoding de variables categóricas
-        ↓
-5. Estandarización (media 0, std 1)
-        ↓
-6. División entrenamiento / prueba (75% / 25%)
-        ↓
-7. Entrenamiento: Regresión Lineal vs HuberRegressor
-        ↓
-8. Evaluación con MAE (Error Absoluto Medio)
-        ↓
-9. Análisis de coeficientes — variables más influyentes
-```
-
-### Métrica de Evaluación
-
-Se usa el **MAE (Mean Absolute Error)**: el promedio de cuánto se equivoca el modelo al predecir el precio.
-
-$$\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} \left| y_i - \hat{y}_i \right|$$
-
-- Cuanto menor es el MAE, mayor es la precisión del modelo
-- El modelo presenta un error absoluto promedio de 169,465 en la predicción del precio de las propiedades
----
-
-## 3. Conclusiones Finales
-
-### Comparación de Modelos
-El **HuberRegressor redujo el error en un 7.3%** respecto a la regresión lineal, sin sacrificar interpretabilidad. Es más adecuado cuando los datos tienen precios extremos — como ocurre siempre en el mercado inmobiliario real.
-
-### Variables Más Influyentes
-
-- Las variables de **ubicación geográfica** tienen alta influencia
-- El tipo de propiedad `viager` tiene el coeficiente más negativo — reduce significativamente el precio predicho
-- Garaje, balcón y aire acondicionado tienen influencia positiva
-
-### Limitaciones del Modelo
-
-- El modelo no captura relaciones no lineales entre variables y precio
-- El umbral de Huber fue fijado manualmente; optimización de hiperparámetros podría mejorar resultados
-- Variables con alta nulidad debieron descartarse, reduciendo información disponible
-
-### Trabajo Futuro
-
-Probar modelos no lineales como Random Forest o XGBoost, aplicar optimización de hiperparámetros y enriquecer el dataset con variables de contexto como cercanía a servicios.
-
-
-## Habilidades Demostradas
-
-- Modelado estadístico
-- Regresión robusta
-- Machine Learning supervisado
-- Feature Engineering
-- Tratamiento de outliers
-- Preprocesamiento de datos
-- Estandarización y codificación
-- Evaluación de modelos
-- Interpretabilidad de modelos
-- Python / Scikit-learn
-
----
-
-## Autor
-
-Proyecto desarrollado como parte de un curso de **Machine Learning & AI**.
+*Proyecto desarrollado con enfoque metodológico comercial enfocado en soluciones de Machine Learning aplicadas a problemas PropTech.*
 
 
 

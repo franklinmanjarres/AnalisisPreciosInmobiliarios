@@ -1,4 +1,4 @@
-# Modelado de Regresión Robusta y Machine Learning para la Predicción de Precios Inmobiliarios (PropTech)
+# Predicción de Precios Inmobiliarios 
 
 ![portada](assets/Portada_inmobiliario.png)
 

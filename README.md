@@ -81,5 +81,3 @@ El dataset utilizado es de carácter académico/personal. Para replicar el anál
 **Franklin Manuel Manjarres**  
 Matemático | Machine Learning Enthusiast  
 Orientado a soluciones prácticas, robustas e interpretables para problemas de negocio.
-
-Si tienes feedback o buscas talento con sólida base analítica en Python y Scikit-Learn, no dudes en contactarme.

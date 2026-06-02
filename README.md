@@ -1,9 +1,5 @@
 # Análisis Predictivo de Precios Inmobiliarios
 
-![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat&logo=python&logoColor=white)
-![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.x-F7931E?style=flat&logo=scikit-learn&logoColor=white)
-![Status](https://img.shields.io/badge/Estado-Completado-2ea44f?style=flat)
-![License](https://img.shields.io/badge/Licencia-MIT-blue?style=flat)
 
 Proyecto de regresión para predecir precios de mercado de propiedades inmobiliarias, con énfasis en **robustez ante valores atípicos** e **interpretabilidad de los resultados**.
 

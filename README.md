@@ -1,83 +1,131 @@
-# Análisis Predictivo de Precios Inmobiliarios
+# Predicción de Precios de Vivienda — Francia
 
+Proyecto de machine learning aplicado al mercado inmobiliario francés. El objetivo es predecir el precio de venta de una vivienda a partir de sus características físicas, energéticas y de ubicación, utilizando técnicas de regresión supervisada.
 
-Proyecto de regresión para predecir precios de mercado de propiedades inmobiliarias, con énfasis en **robustez ante valores atípicos** e **interpretabilidad de los resultados**.
-
----
-
-## Objetivo
-
-Construir un modelo predictivo capaz de estimar el precio de una propiedad a partir de sus características estructurales y tipológicas, eligiendo un enfoque que tolere los outliers inherentes al mercado inmobiliario (propiedades de lujo, errores de registro) sin sacrificar la interpretabilidad del modelo.
+Desarrollado como parte del Módulo II del curso Machine Learning & AI for the Working Analyst, Colegio de Matemáticas Bourbaki.
 
 ---
 
-## Resultados Principales
+## Descripción del problema
 
-| Modelo | MAE | Mejora |
-|---|---|---|
-| Regresión Lineal Clásica | 182,847 | — |
-| **HuberRegressor** | **169,465** | **↓ 7.3%** |
+Dado un conjunto de 37,368 registros de viviendas en Francia con características como superficie, número de habitaciones, eficiencia energética y código postal, se busca construir un modelo que estime el precio de venta con el menor error posible.
 
-> El HuberRegressor redujo el error absoluto medio en un **7.3%** frente a la regresión lineal estándar, siendo más robusto ante el 2.5% de propiedades que superan 1.275M en precio.
+Las métricas utilizadas son MAE (Error Absoluto Medio) y RMSE (Raíz del Error Cuadrático Medio). No se utiliza R² en ninguna parte del análisis.
+
+---
+
+## Dataset
+
+- Fuente: dataset inmobiliario francés con variables numéricas y categóricas
+- Registros: 37,368 viviendas
+- Variables originales: 26
+- Variables finales tras preprocesamiento: 47 (luego de codificación One-Hot)
+- Archivo de características: `X.csv`
+- Archivo de precios: `y.csv`
+
+Variables categóricas incluidas:
+
+- `property_type` — tipo de inmueble (appartement, maison, etc.)
+- `energy_performance_category` — certificado energético escala A a G
+- `ghg_category` — emisiones de gases efecto invernadero escala A a G
+- `exposition` — orientación cardinal de la fachada
+
+---
+
+## Estructura del proyecto
+
+```
+AnálisisPredictivoInmobiliario.ipynb   notebook principal
+X.csv                                  características de las viviendas
+y.csv                                  variable objetivo (price)
+README.md                              este archivo
+```
 
 ---
 
 ## Metodología
 
-### Análisis Exploratorio y Limpieza de Datos
-- Imputación de valores nulos con la **mediana** para variables numéricas (`size`, `nb_rooms`).
-- Eliminación de variables con alta cardinalidad (`city`, `postal_code`) o exceso de nulos para evitar sobreajuste.
-- Detección de outliers en precios: el 2.5% de propiedades superan 1.275M de unidades monetarias.
+### 1. Limpieza y preprocesamiento
 
-### Ingeniería de Características
-- **Análisis de Pareto** sobre `property_type`: se conservaron 9 categorías que representan el 99% de los datos, reduciendo ruido categórico.
-- *One-Hot Encoding* sobre las categorías resultantes.
-- Conversión de variables binarias al formato booleano correcto.
-- **Estandarización** con `StandardScaler` para mejorar convergencia del modelo.
+Se eliminó la variable `city` por alta cardinalidad (8,643 categorías únicas). Los valores faltantes se imputaron con la mediana para variables numéricas y con la moda para variables categóricas. Once variables presentaban nulos, todas tratadas sin eliminar registros.
 
-### Selección de Variables
-- `nb_rooms` mostró la mayor correlación con el precio (r = 0.30).
-- Variables geográficas (`approximate_latitude`) y `size` descartadas por baja relevancia predictiva.
+### 2. Selección de variables numéricas
 
-### Modelado y Evaluación
-- Comparación entre `LinearRegression` y `HuberRegressor`.
-- Evaluación del supuesto de normalidad en residuos mediante **curtosis** y visualizaciones empíricas.
-- Elección justificada del HuberRegressor por su función de pérdida híbrida (cuadrática para errores pequeños, lineal para grandes).
+Se calculó la correlación de Pearson de cada variable con `price`. Se descartaron 9 variables con correlación absoluta menor a 0.05 por no aportar información útil al modelo. Se construyó la matriz de correlación entre las variables restantes para detectar redundancia; ningún par superó el umbral de 0.85.
+
+### 3. Árbol de Decisión como preprocesamiento
+
+Se utilizó un `DecisionTreeClassifier` (max_depth=6) entrenado sobre una versión binaria de `price` (umbral = mediana de 255,250 €) para identificar las variables numéricas con mayor capacidad discriminativa. El árbol no es el modelo final; su función es reducir la dimensionalidad antes de aplicar la regresión. Se seleccionaron 6 variables con importancia mayor a 0.01:
+
+- `postal_code`
+- `nb_rooms`
+- `nb_bedrooms`
+- `approximate_longitude`
+- `floor`
+- `nb_terraces`
+
+### 4. Codificación y partición
+
+Las variables categóricas se transformaron con `OneHotEncoder` (min_frequency=0.001). El dataset final quedó con 47 columnas. La partición fue 75% entrenamiento (28,026 registros) y 25% validación (9,342 registros), con random_state=42.
+
+### 5. Estandarización
+
+Se aplicó `StandardScaler` a todas las variables antes de entrenar los modelos. Esto fue determinante para el HuberRegressor, ya que sin estandarización variables como `postal_code` (valores ~75,000) distorsionan el modelo frente a variables como `nb_rooms` (valores 1-10).
 
 ---
 
-## Conclusiones e Interpretación de Negocio
+## Modelos evaluados
 
-Los coeficientes del modelo permiten cuantificar el impacto de cada variable en el precio:
+Todos los modelos fueron evaluados con validación cruzada de 10 folds (KFold, shuffle=True, random_state=42).
 
-| Factor | Dirección | Interpretación |
+| Modelo | MAE validación | Desviación estándar |
 |---|---|---|
-| `nb_rooms` | Aumenta precio | Mayor número de habitaciones agrega valor |
-| `property_type: propriété` | Aumenta precio | Propiedades exclusivas tienen alta valorización |
-| `property_type: appartement` | Aumenta precio | Los apartamentos presentan precio superior a la categoría base |
-| `property_type: viager` | Reduce precio | Derecho de uso vitalicio reduce significativamente el valor de mercado |
-| `property_type: maison` | Reduce precio | Casas tienden a valor menor frente a la categoría base |
-| `nb_boxes` | Reduce precio | Posiblemente asociado a ubicaciones menos urbanizadas |
+| Línea base (predecir la media) | 207,801 € | — |
+| Regresión Lineal estandarizada | 178,217 € | ± 3,781 € |
+| HuberRegressor sin estandarizar | 198,268 € | ± 17,839 € |
+| HuberRegressor estandarizado | 165,223 € | ± 3,943 € |
+
+El modelo final seleccionado fue el **HuberRegressor estandarizado**, con los siguientes resultados sobre el conjunto de validación:
+
+- MAE: 166,935 €
+- RMSE: 289,054 €
+- Mejora sobre línea base: 19.7%
+
+La diferencia entre MAE y RMSE (aproximadamente 122,000 €) refleja el impacto de las viviendas de lujo (precios hasta 2.3 M€) que el modelo no logra predecir correctamente. Esto se confirma con una kurtosis de residuos de 14.74, muy superior a la distribución teórica normal.
 
 ---
 
-## Tecnologías Utilizadas
+## Variables más influyentes
 
-- **Lenguaje:** Python 3.10+
-- **Manipulación de datos:** Pandas, NumPy, SciPy
-- **Machine Learning:** Scikit-Learn (`HuberRegressor`, `LinearRegression`, `StandardScaler`)
-- **Visualización:** Matplotlib, Seaborn
+La variable con mayor impacto en el modelo es `postal_code`, lo que confirma que la ubicación es el factor determinante del precio en el mercado inmobiliario francés. Le siguen en importancia `nb_rooms` y `nb_bedrooms`, que capturan el tamaño del inmueble.
+
+Las categorías de eficiencia energética y el tipo de inmueble tienen influencia menor pero estadísticamente presente en el modelo.
 
 ---
 
-## Datos
+## Tecnologías utilizadas
 
-El dataset utilizado es de carácter académico/personal. Para replicar el análisis, pueden usarse datasets similares disponibles públicamente en [Kaggle](https://www.kaggle.com/) (ej. *France Real Estate*) o adaptar el pipeline a un conjunto de datos propio.
+- Python 3.12
+- pandas
+- numpy
+- matplotlib
+- seaborn
+- scikit-learn (LinearRegression, HuberRegressor, DecisionTreeClassifier, OneHotEncoder, StandardScaler, KFold, cross_validate)
+- scipy (kurtosis)
+
+---
+
+## Cómo ejecutar
+
+1. Clonar el repositorio
+2. Subir `X.csv` e `y.csv` al mismo directorio que el notebook
+3. Abrir `AnálisisPredictivoInmobiliario.ipynb` en Google Colab o Jupyter
+4. Ejecutar Runtime > Run all
 
 ---
 
 ## Autor
 
-**Franklin Manuel Manjarres**  
-Matemático | Machine Learning Enthusiast  
-Orientado a soluciones prácticas, robustas e interpretables para problemas de negocio.
+Franklin — Universidad del Valle, Cali, Colombia  
+Curso: Machine Learning & AI for the Working Analyst  
+Colegio de Matemáticas Bourbaki

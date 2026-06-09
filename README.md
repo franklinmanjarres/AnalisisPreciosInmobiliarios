@@ -1,131 +1,140 @@
-# Predicción de Precios de Vivienda — Francia
+# Predicción de Precios de Vivienda — Mercado Inmobiliario Francés
 
-Proyecto de machine learning aplicado al mercado inmobiliario francés. El objetivo es predecir el precio de venta de una vivienda a partir de sus características físicas, energéticas y de ubicación, utilizando técnicas de regresión supervisada.
-
-Desarrollado como parte del Módulo II del curso Machine Learning & AI for the Working Analyst, Colegio de Matemáticas Bourbaki.
-
----
-
-## Descripción del problema
-
-Dado un conjunto de 37,368 registros de viviendas en Francia con características como superficie, número de habitaciones, eficiencia energética y código postal, se busca construir un modelo que estime el precio de venta con el menor error posible.
-
-Las métricas utilizadas son MAE (Error Absoluto Medio) y RMSE (Raíz del Error Cuadrático Medio). No se utiliza R² en ninguna parte del análisis.
+**Sector:** Real Estate  
+**Técnica:** Regresión supervisada con Machine Learning  
+**Datos:** 37,368 registros de viviendas en Francia  
+**Resultado:** MAE de 166,935 € — mejora del 19.7% sobre la línea base
 
 ---
 
-## Dataset
+## El problema
 
-- Fuente: dataset inmobiliario francés con variables numéricas y categóricas
-- Registros: 37,368 viviendas
-- Variables originales: 26
-- Variables finales tras preprocesamiento: 47 (luego de codificación One-Hot)
-- Archivo de características: `X.csv`
-- Archivo de precios: `y.csv`
-
-Variables categóricas incluidas:
-
-- `property_type` — tipo de inmueble (appartement, maison, etc.)
-- `energy_performance_category` — certificado energético escala A a G
-- `ghg_category` — emisiones de gases efecto invernadero escala A a G
-- `exposition` — orientación cardinal de la fachada
+Las plataformas inmobiliarias necesitan estimar el precio de venta de una propiedad antes de publicarla. Una estimación imprecisa genera pérdidas para el vendedor o alarga el tiempo de venta. Este proyecto construye un modelo que predice el precio a partir de características físicas, energéticas y de ubicación del inmueble.
 
 ---
 
-## Estructura del proyecto
+## Resultados
 
-```
-AnálisisPredictivoInmobiliario.ipynb   notebook principal
-X.csv                                  características de las viviendas
-y.csv                                  variable objetivo (price)
-README.md                              este archivo
-```
+| Modelo | MAE validación |
+|---|---|
+| Línea base (predecir la media) | 207,801 € |
+| Regresión Lineal estandarizada | 178,217 € |
+| HuberRegressor sin estandarizar | 198,268 € |
+| HuberRegressor estandarizado | 165,223 € |
 
----
-
-## Metodología
-
-### 1. Limpieza y preprocesamiento
-
-Se eliminó la variable `city` por alta cardinalidad (8,643 categorías únicas). Los valores faltantes se imputaron con la mediana para variables numéricas y con la moda para variables categóricas. Once variables presentaban nulos, todas tratadas sin eliminar registros.
-
-### 2. Selección de variables numéricas
-
-Se calculó la correlación de Pearson de cada variable con `price`. Se descartaron 9 variables con correlación absoluta menor a 0.05 por no aportar información útil al modelo. Se construyó la matriz de correlación entre las variables restantes para detectar redundancia; ningún par superó el umbral de 0.85.
-
-### 3. Árbol de Decisión como preprocesamiento
-
-Se utilizó un `DecisionTreeClassifier` (max_depth=6) entrenado sobre una versión binaria de `price` (umbral = mediana de 255,250 €) para identificar las variables numéricas con mayor capacidad discriminativa. El árbol no es el modelo final; su función es reducir la dimensionalidad antes de aplicar la regresión. Se seleccionaron 6 variables con importancia mayor a 0.01:
-
-- `postal_code`
-- `nb_rooms`
-- `nb_bedrooms`
-- `approximate_longitude`
-- `floor`
-- `nb_terraces`
-
-### 4. Codificación y partición
-
-Las variables categóricas se transformaron con `OneHotEncoder` (min_frequency=0.001). El dataset final quedó con 47 columnas. La partición fue 75% entrenamiento (28,026 registros) y 25% validación (9,342 registros), con random_state=42.
-
-### 5. Estandarización
-
-Se aplicó `StandardScaler` a todas las variables antes de entrenar los modelos. Esto fue determinante para el HuberRegressor, ya que sin estandarización variables como `postal_code` (valores ~75,000) distorsionan el modelo frente a variables como `nb_rooms` (valores 1-10).
-
----
-
-## Modelos evaluados
-
-Todos los modelos fueron evaluados con validación cruzada de 10 folds (KFold, shuffle=True, random_state=42).
-
-| Modelo | MAE validación | Desviación estándar |
-|---|---|---|
-| Línea base (predecir la media) | 207,801 € | — |
-| Regresión Lineal estandarizada | 178,217 € | ± 3,781 € |
-| HuberRegressor sin estandarizar | 198,268 € | ± 17,839 € |
-| HuberRegressor estandarizado | 165,223 € | ± 3,943 € |
-
-El modelo final seleccionado fue el **HuberRegressor estandarizado**, con los siguientes resultados sobre el conjunto de validación:
+**Modelo final — HuberRegressor estandarizado**
 
 - MAE: 166,935 €
 - RMSE: 289,054 €
 - Mejora sobre línea base: 19.7%
 
-La diferencia entre MAE y RMSE (aproximadamente 122,000 €) refleja el impacto de las viviendas de lujo (precios hasta 2.3 M€) que el modelo no logra predecir correctamente. Esto se confirma con una kurtosis de residuos de 14.74, muy superior a la distribución teórica normal.
+> MAE es el error promedio por vivienda. RMSE penaliza más los errores grandes — la diferencia entre ambos (122,000 €) refleja el impacto de las viviendas de lujo que el modelo no puede predecir bien.
 
 ---
 
-## Variables más influyentes
+## Metodología
 
-La variable con mayor impacto en el modelo es `postal_code`, lo que confirma que la ubicación es el factor determinante del precio en el mercado inmobiliario francés. Le siguen en importancia `nb_rooms` y `nb_bedrooms`, que capturan el tamaño del inmueble.
+**1. Limpieza** — Se eliminó `city` (8,643 categorías únicas). Nulos imputados con mediana y moda.
 
-Las categorías de eficiencia energética y el tipo de inmueble tienen influencia menor pero estadísticamente presente en el modelo.
+**2. Selección numérica** — Correlación de Pearson con `price`. Se descartaron 9 variables con |r| < 0.05.
 
----
+**3. Árbol de Decisión como preprocesamiento** — Se binarizó `price` (umbral = mediana 255,250 €) y se entrenó un `DecisionTreeClassifier` para identificar las 6 variables numéricas con mayor poder discriminativo: `postal_code`, `nb_rooms`, `nb_bedrooms`, `approximate_longitude`, `floor`, `nb_terraces`.
 
-## Tecnologías utilizadas
+**4. Codificación** — `OneHotEncoder` sobre 4 variables categóricas → 47 columnas finales.
 
-- Python 3.12
-- pandas
-- numpy
-- matplotlib
-- seaborn
-- scikit-learn (LinearRegression, HuberRegressor, DecisionTreeClassifier, OneHotEncoder, StandardScaler, KFold, cross_validate)
-- scipy (kurtosis)
+**5. Estandarización** — `StandardScaler` aplicado antes del modelado. Este fue el paso con mayor impacto: el HuberRegressor pasó de 198,268 € a 165,223 € de MAE solo por escalar correctamente las variables.
+
+**6. Validación** — KFold de 10 particiones para todos los modelos. Partición 75% entrenamiento / 25% validación.
 
 ---
 
-## Cómo ejecutar
+## Visualizaciones
 
-1. Clonar el repositorio
-2. Subir `X.csv` e `y.csv` al mismo directorio que el notebook
-3. Abrir `AnálisisPredictivoInmobiliario.ipynb` en Google Colab o Jupyter
-4. Ejecutar Runtime > Run all
+### Correlación de variables con el precio
+![Correlación con price](imagenes/correlacion_precio.png)
+
+### Matriz de correlación entre predictoras
+![Matriz de correlación](imagenes/matriz_correlacion.png)
+
+### Selección por Árbol de Decisión
+![Importancia de variables](imagenes/importancia_arbol.png)
+
+### Comparación de modelos
+![Comparación de modelos](imagenes/comparacion_modelos.png)
+
+### Distribución de residuos
+![Residuos](imagenes/residuos.png)
+
+### Variables más influyentes
+![Variables influyentes](imagenes/variables_influyentes.png)
+
+---
+
+## Conclusiones
+
+La ubicación (`postal_code`) es el factor más determinante del precio, con una importancia tres veces superior a la segunda variable. El modelo predice bien viviendas de precio normal pero falla con el segmento de lujo (precio > 1 M€), que concentra los errores más grandes. Para ese segmento se necesitarían variables adicionales que el dataset no incluye.
+
+---
+
+## Tecnologías
+
+Python 3.12, pandas, numpy, matplotlib, seaborn, scikit-learn, scipy
+
+---
+
+## Publicación LinkedIn
+
+> Construí un modelo para predecir el precio de viviendas en Francia con 37,368 registros y lo que más me sorprendió fue lo que pasó con la estandarización.
+>
+> El HuberRegressor sin escalar las variables: MAE de 198,268 €.
+> El mismo modelo con StandardScaler: 165,223 €.
+> Una diferencia de 33,000 € solo por poner las variables en la misma escala.
+>
+> El pipeline incluyó limpieza, selección por correlación, un Árbol de Decisión como preprocesamiento (no como modelo final), codificación One-Hot y validación cruzada de 10 folds.
+>
+> Resultado final: MAE de 166,935 € — mejora del 19.7% sobre la línea base.
+>
+> Proyecto documentado en GitHub con metodología, visualizaciones y resultados.
+> [enlace al repositorio]
+
+**Imagen de portada recomendada:** `comparacion_modelos.png` — muestra números concretos y criterio técnico en una sola imagen.
+
+---
+
+## Cómo exportar las imágenes del notebook
+
+Agregar antes de cada `plt.show()`:
+```python
+plt.savefig('imagenes/nombre.png', dpi=150, bbox_inches='tight')
+```
+
+Imágenes a exportar:
+- `correlacion_precio.png` — sección 4.1
+- `matriz_correlacion.png` — sección 4.2
+- `importancia_arbol.png` — sección 6
+- `comparacion_modelos.png` — sección 10.6
+- `residuos.png` — sección 11
+- `variables_influyentes.png` — sección 12
+
+---
+
+## Estructura del repositorio
+
+```
+Proyecto_Precios_Vivienda_Francia/
+├── README.md
+└── imagenes/
+    ├── correlacion_precio.png
+    ├── matriz_correlacion.png
+    ├── importancia_arbol.png
+    ├── comparacion_modelos.png
+    ├── residuos.png
+    └── variables_influyentes.png
+```
 
 ---
 
 ## Autor
 
 Franklin — Universidad del Valle, Cali, Colombia  
-Curso: Machine Learning & AI for the Working Analyst  
-Colegio de Matemáticas Bourbaki
+Curso: Machine Learning & AI for the Working Analyst — Colegio de Matemáticas Bourbaki

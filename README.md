@@ -84,7 +84,7 @@ Las variables con mayor correlación positiva son `nb_rooms` y `nb_bedrooms`. Nu
 
 ### Matriz de correlación entre variables predictoras
 
-![Matriz de correlación](assets/2matrizcorrelacion.png)
+![Matriz de correlación](assets/2matri)
 
 La diagonal principal siempre vale 1.00. El par `nb_rooms` / `nb_bedrooms` alcanza 0.83 pero no supera el umbral de 0.85, por lo que ambas se conservan. No se detectaron variables redundantes.
 

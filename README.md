@@ -100,8 +100,7 @@ El árbol identificó `postal_code` como la variable con mayor poder discriminat
 
 ### Comparación de modelos
 
-![Comparación de modelos](<img width="575" height="140" alt="image" src="https://github.com/user-attachments/assets/082b908e-438c-45b9-8dac-7e1e096aed93" />
-)
+![Comparación de modelos](assets/3tabla.png)
 
 La estandarización fue el paso determinante. Sin ella, el HuberRegressor obtuvo un MAE de 198,268 €. Con variables estandarizadas, el mismo modelo alcanzó 165,223 € — una mejora de 33,000 € solo por escalar correctamente las variables.
 

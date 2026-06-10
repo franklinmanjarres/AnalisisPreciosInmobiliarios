@@ -96,7 +96,6 @@ La diagonal principal siempre vale 1.00. El par `nb_rooms` / `nb_bedrooms` alcan
 
 ### Selección de variables — Árbol de Decisión
 
-![Importancia de variables](imagenes/importancia_arbol.png)
 
 El árbol identificó `postal_code` como la variable con mayor poder discriminativo (importancia 0.38), seguida de `nb_rooms` (0.30) y `nb_bedrooms` (0.16). Esto confirma que ubicación y tamaño son los factores que mejor separan viviendas caras de baratas.
 

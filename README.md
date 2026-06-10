@@ -76,7 +76,9 @@ MAE 166,935 € — RMSE 289,054 € — Mejora 19.7%
 
 ### Correlación de variables numéricas con el precio
 
-![Correlación con price](imagenes/correlacion_precio.png)
+![Correlación con price]((<p align="center">
+  <img src="assets/correlacion.jpeg" width="550" alt="Matriz de Correlacion entre variables">
+</p>))
 
 Las variables con mayor correlación positiva son `nb_rooms` y `nb_bedrooms`. Nueve variables fueron descartadas por correlación inferior a 0.05 con el precio.
 

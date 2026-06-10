@@ -84,17 +84,7 @@ Las variables con mayor correlación positiva son `nb_rooms` y `nb_bedrooms`. Nu
 
 ---
 
-### Matriz de correlación entre variables predictoras
-
-![Matriz de correlación]((<p align="center">
-  <img src="assets/2.jpeg" width="550" alt="Matriz de Correlacion entre variables">
-</p>))
-
-La diagonal principal siempre vale 1.00. El par `nb_rooms` / `nb_bedrooms` alcanza 0.83 pero no supera el umbral de 0.85, por lo que ambas se conservan. No se detectaron variables redundantes.
-
----
-
-### Selección de variables — Árbol de Decisión
+ ### Selección de variables — Árbol de Decisión
 
 
 El árbol identificó `postal_code` como la variable con mayor poder discriminativo (importancia 0.38), seguida de `nb_rooms` (0.30) y `nb_bedrooms` (0.16). Esto confirma que ubicación y tamaño son los factores que mejor separan viviendas caras de baratas.

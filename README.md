@@ -119,7 +119,7 @@ La mayoría de errores se concentran cerca de cero. La cola derecha larga corres
 ### Variables más influyentes
 
 ![Variables influyentes](<p align="center">
-  <img src="assets/4variables.jpeg" width="320" alt="Comparación de variables">
+  <img src="assets/4variables.jpeg" width="550" alt="Matriz de correlación de variables">
 </p>)
 
 Con variables estandarizadas, los coeficientes son directamente comparables. `postal_code` domina con amplia ventaja, lo que refleja el peso de la ubicación en el mercado francés. El segundo gráfico excluye `postal_code` para visualizar el impacto relativo de las demás variables.

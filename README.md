@@ -101,7 +101,7 @@ El árbol identificó `postal_code` como la variable con mayor poder discriminat
 ### Comparación de modelos
 
 ![Comparación de modelos](<p align="center">
-  <img src="assets/4t.jpeg" width="320" alt="Comparación de modelos">
+  <img src="assets/4t.jpeg" width="550" alt="Comparacion de modelos">
 </p>)
 
 La estandarización fue el paso determinante. Sin ella, el HuberRegressor obtuvo un MAE de 198,268 €. Con variables estandarizadas, el mismo modelo alcanzó 165,223 € — una mejora de 33,000 € solo por escalar correctamente las variables.
@@ -110,7 +110,9 @@ La estandarización fue el paso determinante. Sin ella, el HuberRegressor obtuvo
 
 ### Distribución de residuos — modelo final
 
-![Distribución de residuos](assets/3.png)
+![Distribución de residuos](<p align="center">
+  <img src="assets/3.jpeg" width="550" alt="Distribucion de Residuos">
+</p>)
 
 La mayoría de errores se concentran cerca de cero. La cola derecha larga corresponde a viviendas de lujo (precio > 1 M€) que el modelo no puede predecir bien con las variables disponibles. La kurtosis de 14.74 confirma la presencia de estos errores extremos.
 
@@ -119,10 +121,10 @@ La mayoría de errores se concentran cerca de cero. La cola derecha larga corres
 ### Variables más influyentes
 
 ![Variables influyentes](<p align="center">
-  <img src="assets/4variables.jpeg" width="550" alt="Matriz de correlación de variables">
+  <img src="assets/4variables.jpeg" width="550" alt="variables mas influyentes">
 </p>)
 
-Con variables estandarizadas, los coeficientes son directamente comparables. `postal_code` domina con amplia ventaja, lo que refleja el peso de la ubicación en el mercado francés. El segundo gráfico excluye `postal_code` para visualizar el impacto relativo de las demás variables.
+Con variables estandarizadas, los coeficientes son directamente comparables. `postal_code` domina con amplia ventaja, lo que refleja el peso de la ubicación en el mercado francés.
 
 ---
 

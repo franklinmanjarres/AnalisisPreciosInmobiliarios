@@ -118,7 +118,7 @@ La mayoría de errores se concentran cerca de cero. La cola derecha larga corres
 
 ### Variables más influyentes
 
-![Variables influyentes](<img src="https://raw.githubusercontent.com/franklinmanjarres/AnalisisPreciosInmobiliarios/main/assets/4.png" width="600" alt="Variables más influyentes — HuberRegressor estandarizado">)
+![Variables influyentes](<img src="assets/4variables.jpeg" width="600" alt="Variables más influyentes — HuberRegressor estandarizado">)
 
 Con variables estandarizadas, los coeficientes son directamente comparables. `postal_code` domina con amplia ventaja, lo que refleja el peso de la ubicación en el mercado francés. El segundo gráfico excluye `postal_code` para visualizar el impacto relativo de las demás variables.
 

@@ -111,7 +111,7 @@ La estandarización fue el paso determinante. Sin ella, el HuberRegressor obtuvo
 ### Distribución de residuos — modelo final
 
 ![Distribución de residuos](<p align="center">
-  <img src="assets/3.jpeg" width="550" alt="Distribucion de Residuos">
+  <img src="assets/assets/3.png" width="550" alt="Distribucion de Residuos">
 </p>)
 
 La mayoría de errores se concentran cerca de cero. La cola derecha larga corresponde a viviendas de lujo (precio > 1 M€) que el modelo no puede predecir bien con las variables disponibles. La kurtosis de 14.74 confirma la presencia de estos errores extremos.

@@ -143,7 +143,8 @@ La estandarización de variables fue el paso metodológico con mayor impacto en 
 
 ## Autor
 
-Franklin  
-Universidad del Valle — Cali, Colombia  
-Curso: Machine Learning & AI for the Working Analyst  
-Colegio de Matemáticas Bourbaki
+**Franklin Manuel Manjarres**
+
+Proyecto desarrollado como parte del programa de formación **Machine Learning & AI for the Working Analyst** impartido por la :contentReference[oaicite:0]{index=0}.
+
+Aplicando técnicas de análisis de datos, ingeniería de características y modelos de aprendizaje automático para la predicción de precios inmobiliarios.

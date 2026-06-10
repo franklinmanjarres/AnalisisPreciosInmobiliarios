@@ -145,4 +145,4 @@ La estandarización de variables fue el paso metodológico con mayor impacto en 
 
 **Franklin Manuel Manjarres**
 Proyecto desarrollado como parte del programa de formación **Machine Learning & AI for the Working Analyst**.
-Aplicando técnicas de análisis de datos, ingeniería de características y modelos de aprendizaje automático para la predicción de precios inmobiliarios.
+Aplicando técnicas de análisis de datos, ingeniería de características y modelos de aprendizaje automático para la predicción de precios inmobiliarios.                             

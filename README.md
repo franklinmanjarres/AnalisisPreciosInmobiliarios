@@ -1,4 +1,4 @@
-# Predicción de Precios de Vivienda — Mercado Inmobiliario Francés
+# Predicción de Precios de Vivienda — Mercado Inmobiliario
 
 **Tipo de proyecto:** Machine Learning — Regresión supervisada  
 **Sector:** Real Estate  
